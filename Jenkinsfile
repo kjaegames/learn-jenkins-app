@@ -1,7 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'node:18-alpine'
+		        // 강의 자료와 버전을 맞춰주세요! 영상과는 다름!
+            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
             reuseNode true
         }
     }
@@ -25,13 +26,23 @@ pipeline {
             steps {
                 echo 'Test stage'
                 sh '''
-		                test -f build/index.html
+		            test -f build/index.html
                     npm test
                 '''
             }
         }
+
+        stage('E2E') {
+            steps {
+                sh '''
+				            npm install -g serve
+                    serve -s build
+                    npx playwright test
+                '''
+            }
+        }
     }
-    
+
     post {
         always {
             junit 'test-results/junit.xml'
