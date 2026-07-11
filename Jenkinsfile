@@ -23,7 +23,29 @@ pipeline {
         
         stage('Test') {
               steps {
-                echo 'Test stage'
+        sh '''
+            echo "=== Project Files ==="
+            ls -la
+
+            echo "=== Node Version ==="
+            node --version
+            npm --version
+
+            echo "=== Install Dependencies ==="
+            npm ci
+
+            echo "=== Run Tests ==="
+            npm test -- --watchAll=false
+
+            echo "=== Build Project ==="
+            npm run build
+
+            echo "=== Check Build Folder ==="
+            ls -la build
+
+            echo "=== Check index.html ==="
+            test -f build/index.html
+        '''
             }
         }
     
