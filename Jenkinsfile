@@ -23,32 +23,19 @@ pipeline {
         
         stage('Test') {
               steps {
-        sh '''
-            echo "=== Project Files ==="
-            ls -la
-
-            echo "=== Node Version ==="
-            node --version
-            npm --version
-
-            echo "=== Install Dependencies ==="
-            npm ci
-
-            echo "=== Run Tests ==="
-            npm test -- --watchAll=false
-
-            echo "=== Build Project ==="
-            npm run build
-
-            echo "=== Check Build Folder ==="
-            ls -la build
-
-            echo "=== Check index.html ==="
+            sh '''
             test -f build/index.html
+            npm test
         '''
             }
         }
     
+    }
+
+        post {
+        always {
+            junit 'test-results/junit.xml'
+        }
     }
 
 
