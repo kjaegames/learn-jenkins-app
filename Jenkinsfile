@@ -41,6 +41,17 @@ pipeline {
         '''
     }
         }
+
+                stage('Deploy') {
+            
+            steps {
+                sh '''
+                    // 버전 꼭 맞추기!
+                    npm install -g netlify-cli@20.1.1
+                    netlify --version
+                '''
+            }
+        }
     }
 
     post {
